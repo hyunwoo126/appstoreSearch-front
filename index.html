@@ -1,0 +1,99 @@
+<html>
+<head>
+</head>
+<style type="text/css">
+.center{
+    text-align: center;
+}
+#stores{
+    padding: 10px 20px;
+    font-style: bold;
+}
+</style>
+<body>
+
+<h1 class="center">China App Store Search Engine by Redapp</h1>
+
+<div class="center">
+    <input id="input" type="text"/><button id="btn">Search</button>
+</div>
+
+<div>Stores Searched:</div>
+<div id="stores"></div>
+
+<div id="output"></div>
+
+
+<script>
+ (function(){
+    var searchStores = function(appName, store){
+        $('#output').html('');
+        $('#stores').html('');
+        var body = {
+            appName: appName,
+            store: store,
+        }
+        console.log(body);
+        
+        $.post(
+            //"http://localhost:5000/scrape",
+            "http://fast-taiga-21103.herokuapp.com/scrape",
+            body,
+            function(data){
+                $('#stores').append(' '+store);
+                $('#output').append('<div>-----'+store+'-----</div>');
+                for(var i in data){
+                    var app = data[i];
+                    var div = $('<div>')
+                        .append('<span>'+app.name+' : </span>')
+                        .append('<span>'+app.downloads+'</span>');
+                    $('#output').append(div);
+                }
+        });
+    }
+
+
+
+     document.getElementById('btn').onclick = function(){
+        var appName = document.getElementById('input').value;
+        if(!appName){
+            return;
+        }   
+
+        searchStores(appName, 'anzhi');
+        searchStores(appName, 'meizu');
+        searchStores(appName, 'lenovo');
+        searchStores(appName, 'oppo');
+        searchStores(appName, 'pp');
+        searchStores(appName, 'xiaomi');
+        searchStores(appName, 'tencent');
+        //searchStores(appName, 'hiapk');
+        searchStores(appName, '91');
+        searchStores(appName, 'baidu');
+        searchStores(appName, '360');
+        searchStores(appName, 'wandoujia');
+        searchStores(appName, 'huawei');
+        return;
+
+
+        var data = JSON.stringify({
+            msg: 'ok'
+        });
+
+        $.post( "http://localhost:5000/scrape", data, 
+            function( data ) {
+                console.log(data);
+        });
+
+            // $.post( "http://sj.qq.com/myapp/searchAjax.htm?kw=uber&pns=&sid=", data, 
+            //     function( data ) {
+            //         console.log(data);
+            // });
+
+     }
+  
+ })();
+</script>
+<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+</body>
+</html>
